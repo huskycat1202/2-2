@@ -1,8 +1,4 @@
 program palineprime
-
-   ! prime numbers k
-   ! is it palindromic?
-
     integer len,i,j,flag, num(100), list(10000)
     do i=1,10000
         list(i)=0
