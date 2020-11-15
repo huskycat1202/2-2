@@ -1,33 +1,30 @@
-choose_student <- function(club_data, size){
-  pick <- sample(club_data$students, size)
-  club_data$count_ab <- length(intersect(pick, 1:2))
-  if(club_data$count_ab == 2){
-    club_data$count_same <- club_data$count_same +1
+game <- function(){
+  prev <-0
+  won <-5000 #B
+  while(won>0 && won<10000){
+    now <- sample(1:6,1)
+    if((prev+now)%%2==0 && prev!=0){
+      won <- won+1000
+    }
+    else{
+      if(now!=4 && now!=5){
+        won <- won-500
+      }
+    }
+    prev <- now
   }
-  club_data$students <- setdiff(club_data$students, pick)
-  return(club_data)
+  if(won>=10000) won <- 1
+  if(won<=0) won <- 0
+  return (won) # A:0, B:1
 }
 
-simulation <- function(n){
-  club_data <- list()
-  club_data$count_same <- 0
+repgame <- function(n){
+  cnt <- 0
   for(rep in 1:n){
-    club_data$students=c(1:30)
-    club_data$count_ab <- 0
-    
-    club_data <- choose_student(club_data, 10)
-    if (club_data$count_ab > 0) {
-      next
-    }
-    
-    club_data <- choose_student(club_data, 7)
-    if (club_data$count_ab > 0) {
-      next
-    }
-    
-    club_data <- choose_student(club_data, 5)
+    cnt <- cnt+game()
   }
-  return(club_data$count_same/n)
+  print(1-cnt/n)
+  print(cnt/n)
 }
 
-simulation(100000)
+repgame(100000)
